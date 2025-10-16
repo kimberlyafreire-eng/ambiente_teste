@@ -2,7 +2,12 @@
 require_once __DIR__ . '/../session.php';
 
 $client_id = 'c04c4a60229a850f4c932da08d3f0a7e5e32b976';
-$redirect_uri = 'https://pdv.carmaniaprodutosauto.com.br/pdv_carmania/api/auth.php';
+
+$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$scriptPath = $_SERVER['SCRIPT_NAME'] ?? '/api/auth.php';
+$normalizedPath = '/' . ltrim(str_replace('\\', '/', $scriptPath), '/');
+$redirect_uri = sprintf('%s://%s%s', $scheme, $host, $normalizedPath);
 
 if (!isset($_GET['code'])) {
     $state = bin2hex(random_bytes(8));
