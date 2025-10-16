@@ -542,9 +542,18 @@ if ($isCrediario && $clienteId) {
     $payloadSaldo = ['clienteId' => (string)$clienteId];
 
     // Tenta primeiro /api/crediario/saldo.php, depois /api/saldo.php
+    $scriptName = $_SERVER['SCRIPT_NAME'] ?? '/api/salvar-venda.php';
+    $scriptName = str_replace('\\', '/', $scriptName);
+    $apiBasePath = str_replace('\\', '/', dirname($scriptName));
+    if ($apiBasePath === '\\' || $apiBasePath === '/') {
+        $apiBasePath = '';
+    }
+    $apiBasePath = '/' . ltrim($apiBasePath, '/');
+    $apiBasePath = rtrim($apiBasePath, '/');
+
     $tentativas = [
-        '/pdv_carmania/api/crediario/saldo.php',
-        '/pdv_carmania/api/saldo.php',
+        $apiBasePath . '/crediario/saldo.php',
+        $apiBasePath . '/saldo.php',
     ];
 
     foreach ($tentativas as $path) {

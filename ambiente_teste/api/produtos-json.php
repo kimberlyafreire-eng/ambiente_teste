@@ -12,7 +12,12 @@ if (!file_exists($dbFile)) {
 }
 
 $baseImagemDir = realpath(__DIR__ . '/../imagens') ?: __DIR__ . '/../imagens';
-$baseImagemUrl = '/pdv_carmania/imagens';
+$scriptName = $_SERVER['SCRIPT_NAME'] ?? '/api/produtos-json.php';
+$scriptName = str_replace('\\', '/', $scriptName);
+$apiDir = str_replace('\\', '/', dirname($scriptName));
+$projectDir = str_replace('\\', '/', dirname($apiDir));
+$projectDir = trim($projectDir, '/');
+$baseImagemUrl = '/' . ($projectDir !== '' ? $projectDir . '/' : '') . 'imagens';
 
 if (!function_exists('resolverImagemProduto')) {
     function resolverImagemProduto(array $row, string $baseDir, string $baseUrl): string

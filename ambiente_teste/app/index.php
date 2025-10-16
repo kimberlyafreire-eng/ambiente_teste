@@ -4,6 +4,13 @@ if (!isset($_SESSION['usuario'])) {
     header("Location: login.php");
     exit();
 }
+
+$scriptName = $_SERVER['SCRIPT_NAME'] ?? '/app/index.php';
+$scriptName = str_replace('\\', '/', $scriptName);
+$appDir = str_replace('\\', '/', dirname($scriptName));
+$projectDir = str_replace('\\', '/', dirname($appDir));
+$projectDir = trim($projectDir, '/');
+$placeholderImage = '/' . ($projectDir !== '' ? $projectDir . '/' : '') . 'imagens/sem-imagem.png';
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -235,7 +242,7 @@ if (!isset($_SESSION['usuario'])) {
     img.className = 'card-img-top';
     img.alt = produto.nome;
 
-    const placeholder = '/pdv_carmania/imagens/sem-imagem.png';
+    const placeholder = "<?= htmlspecialchars($placeholderImage, ENT_QUOTES, 'UTF-8') ?>";
     let url = produto.imagemURL;
     if (!url || typeof url !== 'string' || url.trim() === '' || url.trim().toLowerCase() === 'null') {
       url = placeholder;
